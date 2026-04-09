@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chrome Hook Panel</title>
+    <link rel="stylesheet" href="panel.css" />
+  </head>
+  <body>
+    <main class="panel-shell">
+      <section class="masthead">
+        <div>
+          <p class="eyebrow">Instrumentation Console</p>
+          <h1>Chrome Hook Panel</h1>
+          <p class="subtitle">当前 DevTools 标签页的分类 Hook、模板插桩和日志检索</p>
+        </div>
+        <div class="status-cluster">
+          <div id="statusBadge" class="status-badge pending">未注入</div>
+          <button id="injectSelectedHooks" class="button primary">注入选中 Hook</button>
+          <button id="removeHooks" class="button warn">取消 Hook</button>
+          <button id="clearLogs" class="button subtle">清空日志</button>
+        </div>
+      </section>
+
+      <section class="workspace-grid">
+        <aside class="sidebar card">
+          <div class="section-heading">
+            <div>
+              <p class="section-title">页面状态</p>
+              <strong id="pageTitle">加载中...</strong>
+            </div>
+            <label class="toggle">
+              <input id="captureStack" type="checkbox" checked />
+              <span>附带调用栈</span>
+            </label>
+          </div>
+          <p id="statusText" class="muted">等待建立连接...</p>
+          <div id="activeCategories" class="tag-list"></div>
+
+          <div class="section-heading inset">
+            <p class="section-title">Hook 分类</p>
+            <span class="muted">按需安装，避免一次性过多注入</span>
+          </div>
+          <div id="categoryGrid" class="category-grid"></div>
+
+          <div class="section-heading inset">
+            <p class="section-title">关键词 Hook</p>
+            <span class="muted">独立监控；下拉选择默认匹配模式，手写前缀会优先覆盖</span>
+          </div>
+          <div class="keyword-toolbar">
+            <label class="keyword-mode-group" for="keywordMode">
+              <span class="muted">默认模式</span>
+              <select id="keywordMode" class="keyword-select">
+                <option value="contains-all">子串: 键和值</option>
+                <option value="contains-key">子串: 仅键</option>
+                <option value="contains-value">子串: 仅值</option>
+                <option value="exact-all">精确: 键和值</option>
+                <option value="exact-key">精确: 仅键</option>
+                <option value="exact-value">精确: 仅值</option>
+              </select>
+            </label>
+          </div>
+          <textarea id="keywordInput" class="analysis-textarea keyword-input" spellcheck="false" placeholder="authorization&#10;key:authorization&#10;exact:sign&#10;exact-value:Bearer"></textarea>
+
+          <div class="section-heading inset">
+            <p class="section-title">模板片段</p>
+            <span class="muted">点击填充后可直接执行</span>
+          </div>
+          <div class="template-column">
+            <button class="chip" data-template="atob">Hook atob / btoa</button>
+            <button class="chip" data-template="fetch">抓取 fetch Body</button>
+            <button class="chip" data-template="json">JSON.parse 断点</button>
+            <button class="chip" data-template="storage">Storage 追踪</button>
+          </div>
+        </aside>
+
+        <section class="editor-pane card">
+          <div class="section-heading">
+            <p class="section-title">自定义插桩代码</p>
+            <button id="runCustomHook" class="button accent">执行自定义 Hook</button>
+          </div>
+          <textarea id="customCode" spellcheck="false"></textarea>
+
+          <div class="section-heading inset">
+            <p class="section-title">分析助手</p>
+            <span class="muted">转义解码与 anti-debug 特征扫描</span>
+          </div>
+          <textarea id="analysisInput" class="analysis-textarea" spellcheck="false" placeholder="粘贴混淆代码、转义字符串或可疑脚本片段"></textarea>
+          <div class="analysis-toolbar">
+            <button id="decodeEscapes" class="button subtle">解码转义</button>
+            <button id="scanAntiDebug" class="button subtle">扫描 Anti-Debug</button>
+            <button id="clearAnalysis" class="button subtle">清空</button>
+          </div>
+          <pre id="analysisOutput" class="analysis-output">等待输入分析内容。</pre>
+        </section>
+
+        <section class="logs-pane card">
+          <div class="section-heading">
+            <p class="section-title">日志检索</p>
+            <span id="logCount" class="muted">0 / 0 条</span>
+          </div>
+          <div class="log-toolbar">
+            <input id="logSearch" class="search-input" type="search" placeholder="检索分类、标签、URL、详情" />
+            <span id="logSummary" class="muted">显示最新结果</span>
+          </div>
+          <div id="logFeed" class="log-feed"></div>
+        </section>
+      </section>
+    </main>
+    <script src="panel.js"></script>
+  </body>
+</html>

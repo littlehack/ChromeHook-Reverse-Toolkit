@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ChromeHook Toolkit</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">Chrome Reverse Hook</p>
+          <h1>ChromeHook Toolkit</h1>
+          <p class="subtitle">实时注入、控制台打印、插桩调试</p>
+        </div>
+        <div class="hero-mark"></div>
+      </header>
+
+      <section class="card status-card">
+        <div>
+          <p class="section-title">当前页面</p>
+          <strong id="pageTitle">正在检测标签页</strong>
+          <p id="statusText" class="muted">等待连接内容脚本...</p>
+          <div id="activeCategories" class="tag-list"></div>
+        </div>
+        <div id="statusBadge" class="badge pending">未注入</div>
+      </section>
+
+      <section class="card category-card">
+        <div class="section-heading">
+          <p class="section-title">Hook 分类</p>
+          <span class="muted">按 README 分类独立安装</span>
+        </div>
+        <div id="categoryGrid" class="category-grid"></div>
+      </section>
+
+      <section class="card keyword-card">
+        <div class="section-heading">
+          <p class="section-title">关键词 Hook</p>
+          <span class="muted">独立监控；下拉选择默认匹配模式，手写前缀会优先覆盖</span>
+        </div>
+        <div class="keyword-toolbar">
+          <label class="keyword-mode-group" for="keywordMode">
+            <span class="muted">默认模式</span>
+            <select id="keywordMode" class="keyword-select">
+              <option value="contains-all">子串: 键和值</option>
+              <option value="contains-key">子串: 仅键</option>
+              <option value="contains-value">子串: 仅值</option>
+              <option value="exact-all">精确: 键和值</option>
+              <option value="exact-key">精确: 仅键</option>
+              <option value="exact-value">精确: 仅值</option>
+            </select>
+          </label>
+        </div>
+        <textarea id="keywordInput" class="keyword-input" spellcheck="false" placeholder="authorization&#10;key:authorization&#10;exact:sign&#10;exact-value:Bearer"></textarea>
+      </section>
+
+      <section class="card action-row">
+        <button id="injectSelectedHooks" class="button primary">注入选中 Hook</button>
+        <button id="removeHooks" class="button warn">取消 Hook</button>
+        <button id="clearLogs" class="button subtle">清空日志</button>
+      </section>
+
+      <section class="card templates-card">
+        <div class="section-heading">
+          <p class="section-title">快速模板</p>
+          <span class="muted">一键填充常用插桩</span>
+        </div>
+        <div class="template-grid">
+          <button class="chip" data-template="atob">Hook atob / btoa</button>
+          <button class="chip" data-template="fetch">抓取 fetch Body</button>
+          <button class="chip" data-template="json">JSON.parse 断点</button>
+          <button class="chip" data-template="storage">Storage 追踪</button>
+        </div>
+      </section>
+
+      <section class="card editor-card">
+        <div class="section-heading">
+          <p class="section-title">自定义 Hook</p>
+          <span class="muted">执行在页面上下文，可直接改写目标函数</span>
+        </div>
+        <textarea id="customCode" spellcheck="false"></textarea>
+        <div class="editor-toolbar">
+          <label class="toggle">
+            <input id="captureStack" type="checkbox" checked />
+            <span>分类 Hook 附带调用栈</span>
+          </label>
+          <button id="runCustomHook" class="button accent">执行自定义 Hook</button>
+        </div>
+      </section>
+
+      <section class="card log-card">
+        <div class="section-heading">
+          <p class="section-title">日志检索</p>
+          <span id="logCount" class="muted">0 / 0 条</span>
+        </div>
+        <div class="log-toolbar">
+          <input id="logSearch" class="search-input" type="search" placeholder="检索分类、标签、URL、详情" />
+          <span id="logSummary" class="muted">显示最新结果</span>
+        </div>
+        <div id="logFeed" class="log-feed"></div>
+      </section>
+
+      <footer class="footnote">
+        页面 DevTools Console 会同步输出带有 [ChromeHook] 前缀的日志。
+      </footer>
+    </main>
+    <script src="popup.js"></script>
+  </body>
+</html>

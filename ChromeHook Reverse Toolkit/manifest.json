@@ -1,0 +1,29 @@
+{
+  "manifest_version": 3,
+  "name": "ChromeHook Reverse Toolkit",
+  "version": "0.1.0",
+  "description": "A Chrome reverse-hook toolkit for runtime instrumentation, console tracing, and live debugging.",
+  "permissions": ["storage", "tabs", "scripting", "activeTab", "webRequest"],
+  "host_permissions": ["<all_urls>"],
+  "background": {
+    "service_worker": "background/service-worker.js"
+  },
+  "action": {
+    "default_title": "ChromeHook Reverse Toolkit",
+    "default_popup": "popup/popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content/content.js"],
+      "run_at": "document_start"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["inject/injected-hook.js"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "devtools_page": "devtools/devtools.html"
+}
